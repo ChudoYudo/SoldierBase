@@ -21,7 +21,7 @@ services:
       - .docker/data/db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: baza_priziv
+      MYSQL_DATABASE: soldier_base
 
   php:
     build: .docker/php
