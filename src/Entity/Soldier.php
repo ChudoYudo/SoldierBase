@@ -31,6 +31,12 @@ class Soldier
      */
     private $third_name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\MilitaryUnit", inversedBy="soldiers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $military_unit;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +74,18 @@ class Soldier
     public function setThirdName(?string $third_name): self
     {
         $this->third_name = $third_name;
+
+        return $this;
+    }
+
+    public function getMilitaryUnit(): ?MilitaryUnit
+    {
+        return $this->military_unit;
+    }
+
+    public function setMilitaryUnit(?MilitaryUnit $military_unit): self
+    {
+        $this->military_unit = $military_unit;
 
         return $this;
     }
