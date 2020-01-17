@@ -1,0 +1,70 @@
+{% block head_css %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+{% endblock %}
+{% block head_js %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+
+        function checkPage (id) {
+            window.location.replace('/soldier/edit/'+id);
+        }
+        function deleteSoldier (id) {
+            window.location.replace('/soldier/delete/'+id);
+        }
+
+    </script>
+{% endblock %}
+{{ form_start(form) }}
+<table class="table table-bordered">
+
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col" style="width: 10%">{{soldiers|length}}</th>
+        <th scope="col">Имя</th>
+        <th scope="col">Фамилия</th>
+        <th scope="col">Отчество</th>
+        <th scope="col">Часть</th>
+        <th scope="col" style="width: 10%"></th>
+    </tr>
+
+    </thead>
+
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col" style="width: 10%">{{form_row(form.first_name)}}</th>
+        <th scope="col">{{ form_row(form.save) }}</th>
+        <th scope="col">Фамилия</th>
+        <th scope="col">Отчество</th>
+        <th scope="col">Часть</th>
+        <th scope="col" style="width: 10%"></th>
+    </tr>
+    </thead>
+{% for soldier in soldiers %}
+    <tr>
+        <td>
+            <button class="btn btn-primary" onclick="checkPage({{ soldier.getId()}})" value="Redirect">Изменить</button>
+        </td>
+        <td>
+           {{soldier.getFirstName()}}
+        </td>
+
+        <td>
+           {{soldier.getLastName()}}
+        </td>
+
+        <td>
+           {{soldier.getThirdName()}}
+        </td>
+
+        <td>
+           {{soldier.getMilitaryUnit().getName()}}
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="deleteSoldier({{ soldier.getId()}})">Delete</button>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{{ form_end(form) }}
