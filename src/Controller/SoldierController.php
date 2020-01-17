@@ -5,6 +5,7 @@ use App\Entity\Soldier;
 
 use App\Form\SoldierFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\MakerBundle\Maker\MakeSerializerEncoder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,17 +56,14 @@ class SoldierController extends AbstractController
     public function all(Request $request){
         $entityManager=$this->getDoctrine()->getManager();
         $soldiers_rep=$entityManager->getRepository(Soldier::class);
-        $search_soldier= new Soldier();
-        $form=$this->createForm(SoldierFormType::class,$search_soldier);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted()&&$form->isValid()) {
-            $search_soldier = $form->getData();
-            $soldiers = $soldiers_rep->find($search_soldier->getFirstName());
-            return $this->render('soldier\all.html.twig', ['soldiers' => $soldiers,'form'=>$form->createView()]);
-        }
         $soldiers=$soldiers_rep->findAll();
-        return $this->render('soldier\all.html.twig', ['soldiers' => $soldiers,'form'=>$form->createView()]);
+        $json=$this->soldiersArrayToJson($soldiers);
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent($json);
+
+        return $response;
     }
 
     /**
@@ -99,5 +97,19 @@ class SoldierController extends AbstractController
         $entityManager->remove($soldier);
         $entityManager->flush();
         return $this->redirect('/soldier/all');
+    }
+
+    public function soldiersArrayToJson($soldiers){
+        $soldiers_array=array();
+        foreach ($soldiers as $soldier){
+            $soldiers_array[]= array(
+                'id'=>$soldier->getId(),
+                'first_name'=>$soldier->getFirstName(),
+                'last_name'=>$soldier->getLastName(),
+                'third_name'=>$soldier->getThirdName(),
+                'milU'=>$soldier->getMilitaryUnit()->getNAme()
+            );
+        }
+        return json_encode($soldiers_array);
     }
 }

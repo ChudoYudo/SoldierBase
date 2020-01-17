@@ -2,7 +2,6 @@
 ###> symfony/framework-bundle ###
 /.env.local
 /.idea
-/.docker/data/
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
@@ -10,3 +9,4 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+/.docker/
