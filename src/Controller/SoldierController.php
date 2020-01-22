@@ -107,9 +107,38 @@ class SoldierController extends AbstractController
                 'first_name'=>$soldier->getFirstName(),
                 'last_name'=>$soldier->getLastName(),
                 'third_name'=>$soldier->getThirdName(),
-                'milU'=>$soldier->getMilitaryUnit()->getNAme()
+                'milU'=>$soldier->getMilitaryUnit()->getName()
             );
         }
         return json_encode($soldiers_array);
+    }
+
+    public function soldierToJson($soldier){
+
+        $soldier_obj= array(
+        'id'=>$soldier->getId(),
+        'first_name'=>$soldier->getFirstName(),
+        'last_name'=>$soldier->getLastName(),
+        'third_name'=>$soldier->getThirdName(),
+        'milU'=>$soldier->getMilitaryUnit()->getName()
+        );
+        return json_encode($soldier_obj);
+    }
+
+
+
+    /**
+     * @Route("/soldier/get/{id}",name="getsoldier")
+     */
+    public function getById(Request $request, $id){
+        $entityManager=$this->getDoctrine()->getManager();
+        $soldiers_rep=$entityManager->getRepository(Soldier::class);
+        $soldier=$soldiers_rep->find($id);
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent($this->soldierToJson($soldier));
+        return $response;
+
     }
 }
