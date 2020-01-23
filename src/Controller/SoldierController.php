@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\MilitaryUnit;
 use App\Entity\Soldier;
 
 use App\Form\SoldierFormType;
@@ -48,6 +49,36 @@ class SoldierController extends AbstractController
         return $this->render('soldier\new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/soldier/newm")
+     */
+    public function newm(Request $request){
+        $entityManager=$this->getDoctrine()->getManager();
+        $mil_rep=$entityManager->getRepository(MilitaryUnit::class);
+        $i=26;
+        while (true) {
+            $soldier= new Soldier();
+            $unit=$mil_rep->find(1);
+            $soldier->setFirstName("nam".$i);
+            $soldier->setLastName("last".$i);
+            $soldier->setMilitaryUnit($unit);
+            $entityManager->persist($soldier);
+            $entityManager->flush();
+            $i=$i+1;
+            if ($i==100){break;}
+        }
+        return new Response("Success");
+
+    }
+
+    /**
+     * @Route("/soldier/change")
+     */
+    public function change(Request $request){
+        var_dump($request->request);
+        exit;
     }
 
     /**
