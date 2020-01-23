@@ -77,8 +77,16 @@ class SoldierController extends AbstractController
      * @Route("/soldier/change")
      */
     public function change(Request $request){
-        var_dump($request->request);
-        exit;
+        $id=$request->request->get('id');
+        $entityManager=$this->getDoctrine()->getManager();
+        $soldier_rep=$entityManager->getRepository(Soldier::class);
+        $soldier=$soldier_rep->find($id);
+        $soldier->setFirstName($request->request->get('first_name'));
+        $soldier->setLastName($request->request->get('last_name'));
+        $soldier->setThirdName($request->request->get('third_name'));
+        $entityManager->persist($soldier);
+        $entityManager->flush();
+        return new Response("success");
     }
 
     /**
@@ -119,15 +127,17 @@ class SoldierController extends AbstractController
     }
 
     /**
-     * @Route("/soldier/delete/{id}",name="delete")
+     * @Route("/soldier/delete",name="delete")
      */
-    public function delete(Request $request,$id){
+    public function delete(Request $request){
+        $id=$request->request->get('id');
+
         $entityManager=$this->getDoctrine()->getManager();
         $soldier_rep=$entityManager->getRepository(Soldier::class);
         $soldier=$soldier_rep->find($id);
         $entityManager->remove($soldier);
         $entityManager->flush();
-        return $this->redirect('/soldier/all');
+        return new Response("succsess");
     }
 
     public function soldiersArrayToJson($soldiers){
