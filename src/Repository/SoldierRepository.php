@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Soldier;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * @method Soldier|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,12 +13,9 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Soldier[]    findAll()
  * @method Soldier[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SoldierRepository extends ServiceEntityRepository
+class SoldierRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Soldier::class);
-    }
+
 
     // /**
     //  * @return Soldier[] Returns an array of Soldier objects
@@ -36,15 +34,19 @@ class SoldierRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+   
     public function findOneBySomeField($value): ?Soldier
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p From App:Soldier WHERE p.first_name = nam4'
+            )->getResult();
+
+//        return $this->createQueryBuilder('s')
+//            ->andWhere('s.first_name = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
     }
-    */
 }

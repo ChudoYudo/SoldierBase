@@ -89,4 +89,5 @@ class Soldier
 
         return $this;
     }
+    
 }

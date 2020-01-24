@@ -5,6 +5,10 @@ use App\Entity\MilitaryUnit;
 use App\Entity\Soldier;
 
 use App\Form\SoldierFormType;
+use App\Repository\SoldierRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\MakerBundle\Maker\MakeSerializerEncoder;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,7 +90,12 @@ class SoldierController extends AbstractController
         $soldier->setThirdName($request->request->get('third_name'));
         $entityManager->persist($soldier);
         $entityManager->flush();
-        return new Response("success");
+
+        $response = new Response();
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent("success");
+
+        return new $response;
     }
 
     /**
@@ -137,7 +146,11 @@ class SoldierController extends AbstractController
         $soldier=$soldier_rep->find($id);
         $entityManager->remove($soldier);
         $entityManager->flush();
-        return new Response("succsess");
+        $response = new Response();
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent("success");
+
+        return new $response;
     }
 
     public function soldiersArrayToJson($soldiers){
@@ -182,4 +195,30 @@ class SoldierController extends AbstractController
         return $response;
 
     }
+
+    /**
+     * @Route("/soldier/search",name="search")
+     */
+    public function search(Request $request){
+        
+        exit;
+        $fname=$request->request->get('first_name');
+        $entityManager=$this->getDoctrine()->getManager();
+        $this->getDoctrine()->getRepository();
+
+        $soldier_rep=$entityManager->getRepository(Soldier::class);
+        $q=$soldier_rep->
+        var_dump($soldiers->getFirstName());
+        exit;
+//        $soldier=$soldier_rep->find($id);
+//        $entityManager->remove($soldier);
+//        $entityManager->flush();
+        $response = new Response();
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent("success");
+
+        return new $response;
+    }
+
+
 }
