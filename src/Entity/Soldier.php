@@ -37,6 +37,11 @@ class Soldier
      */
     private $military_unit;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $birthday_date;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +93,26 @@ class Soldier
         $this->military_unit = $military_unit;
 
         return $this;
+    }
+
+    public function getBirthdayDate(): ?\DateTimeInterface
+    {
+        return $this->birthday_date;
+    }
+
+    public function setBirthdayDate(?\DateTimeInterface $birthday_date): self
+    {
+        $this->birthday_date = $birthday_date;
+
+        return $this;
+    }
+    public function getBirthdayDateFormat($format){
+        if ($this->getBirthdayDate()!==null)
+        {
+            return $this->getBirthdayDate()->format($format);
+        } else {
+            return null;
+        }
     }
     
 }

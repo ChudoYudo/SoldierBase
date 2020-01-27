@@ -14,6 +14,7 @@ use Symfony\Bundle\MakerBundle\Maker\MakeSerializerEncoder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class SoldierController extends AbstractController
 {
@@ -88,6 +89,8 @@ class SoldierController extends AbstractController
         $soldier->setFirstName($request->request->get('first_name'));
         $soldier->setLastName($request->request->get('last_name'));
         $soldier->setThirdName($request->request->get('third_name'));
+        $date= \DateTime::createFromFormat('d/m/Y',$request->request->get('birthday_date'));
+        $soldier->setBirthdayDate($date);
         $entityManager->persist($soldier);
         $entityManager->flush();
 
@@ -161,7 +164,9 @@ class SoldierController extends AbstractController
                 'first_name'=>$soldier->getFirstName(),
                 'last_name'=>$soldier->getLastName(),
                 'third_name'=>$soldier->getThirdName(),
-                'milU'=>$soldier->getMilitaryUnit()->getName()
+                'milU'=>$soldier->getMilitaryUnit()->getName(),
+                'birthday_date'=>$soldier->getBirthdayDateFormat('d/m/Y')
+
             );
         }
         return json_encode($soldiers_array);
@@ -174,6 +179,7 @@ class SoldierController extends AbstractController
         'first_name'=>$soldier->getFirstName(),
         'last_name'=>$soldier->getLastName(),
         'third_name'=>$soldier->getThirdName(),
+        'birthday_date'=>$soldier->getBirthdayDate(),
         'milU'=>$soldier->getMilitaryUnit()->getName()
         );
         return json_encode($soldier_obj);
