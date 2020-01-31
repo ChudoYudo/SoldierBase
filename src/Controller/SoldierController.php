@@ -89,11 +89,41 @@ class SoldierController extends AbstractController
         $soldier->setFirstName($request->request->get('first_name'));
         $soldier->setLastName($request->request->get('last_name'));
         $soldier->setThirdName($request->request->get('third_name'));
-        $date= \DateTime::createFromFormat('d/m/Y',$request->request->get('birthday_date'));
-        $soldier->setBirthdayDate($date);
+        if ($request->request->get('birthday_date')!=0) {
+            $date = \DateTime::createFromFormat('d/m/Y', $request->request->get('birthday_date'));
+            $soldier->setBirthdayDate($date);
+        }
+
         $entityManager->persist($soldier);
         $entityManager->flush();
 
+        $response = new Response();
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent("success");
+
+        return new $response;
+    }
+    /**
+     * @Route("/soldier/addnew")
+     */
+    public function addnew(Request $request){
+        $entityManager=$this->getDoctrine()->getManager();
+        $soldier= new Soldier();
+        $mil_rep=$entityManager->getRepository(MilitaryUnit::class);
+        $unit=$mil_rep->find(1);
+
+
+        $soldier->setMilitaryUnit($unit);
+        $soldier->setFirstName($request->request->get('first_name'));
+        $soldier->setLastName($request->request->get('last_name'));
+        $soldier->setThirdName($request->request->get('third_name'));
+        if ($request->request->get('birthday_date')!=0) {
+            $date = \DateTime::createFromFormat('d/m/Y', $request->request->get('birthday_date'));
+            $soldier->setBirthdayDate($date);
+        }
+
+        $entityManager->persist($soldier);
+        $entityManager->flush();
         $response = new Response();
         $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->setContent("success");
